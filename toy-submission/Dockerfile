@@ -13,5 +13,4 @@ RUN pip install torch numpy scipy
 RUN pip install -r requirements.txt
 
 # Run app.py when the container launches
-# CMD ["python3", "lit-llama/generate.py", "--checkpoint_path", "lit-llama/checkpoints/lit-llama/7B/lit-llama.pth", "--tokenizer_path", "lit-llama/checkpoints/lit-llama/tokenizer.model"]
 CMD ["python3", "generate.py", "--quantize","llm.int8"]
