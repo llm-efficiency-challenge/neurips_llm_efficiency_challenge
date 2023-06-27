@@ -22,5 +22,6 @@ RUN python scripts/convert_hf_checkpoint.py --checkpoint_dir checkpoints/open-ll
 
 # Copy over single file server
 COPY ./main.py /submission/main.py
+COPY ./helper.py /submission/helper.py
 # Run the server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

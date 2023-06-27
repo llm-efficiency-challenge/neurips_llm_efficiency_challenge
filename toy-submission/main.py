@@ -3,11 +3,11 @@ from pathlib import Path
 from fastapi import FastAPI
 from pydantic import BaseModel
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 # Lit-llama imports
-from generate import neurips_generate
+from helper import neurips_generate
 import sys
 import time
 import warnings
