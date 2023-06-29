@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: FastAPI Class Interfaces
+  version: 1.0.0
+paths:
+  /process:
+    post:
+      summary: Process Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessResponse'
+  /tokenize:
+    post:
+      summary: Tokenize Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenizeRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenizeResponse'
+components:
+  schemas:
+    ProcessRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        num_samples:
+          type: integer
+          default: 1
+        max_new_tokens:
+          type: integer
+          default: 50
+        top_k:
+          type: integer
+          default: 200
+        temperature:
+          type: number
+          default: 0.8
+        seed:
+          type: integer
+          nullable: true
+    Token:
+      type: object
+      properties:
+        text:
+          type: string
+        logprob:
+          type: number
+        top_logprob:
+          type: object
+          additionalProperties:
+            type: number
+    ProcessResponse:
+      type: object
+      properties:
+        text:
+          type: string
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/Token'
+        logprob:
+          type: number
+        request_time:
+          type: number
+    TokenizeRequest:
+      type: object
+      properties:
+        text:
+          type: string
+        truncation:
+          type: boolean
+          default: true
+        max_length:
+          type: integer
+          default: 2048
+    TokenizeResponse:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items:
+            type: integer
+        request_time:
+          type: number

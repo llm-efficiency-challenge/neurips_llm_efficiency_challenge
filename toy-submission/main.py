@@ -95,7 +95,6 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
     logger.info(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
     tokens = []
     for t, lp, tlp in zip(tokens, logprobs, top_logprobs):
-        print(t, lp, tlp)
         idx, val = tlp
         tok_str = tokenizer.decode(idx)
         token_tlp = {tok_str: val}
