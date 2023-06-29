@@ -15,7 +15,7 @@ from lit_llama import LLaMA, Tokenizer
 from lit_llama.utils import lazy_load, llama_model_lookup, quantization
 
 @torch.no_grad()
-def neurips_generate(
+def toysubmission_generate(
     model: LLaMA,
     idx: torch.Tensor,
     max_new_tokens: int,

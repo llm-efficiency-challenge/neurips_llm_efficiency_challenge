@@ -6,7 +6,7 @@ import logging
 
 
 # Toy submission imports
-from helper import neurips_generate
+from helper import toysubmission_generate
 from api import (
     ProcessRequest,
     ProcessResponse,
@@ -75,7 +75,7 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
     prompt_length = encoded.size(0)
     # for i in range(input_data.num_samples):
     t0 = time.perf_counter()
-    tokens, logprobs, top_logprobs = neurips_generate(
+    tokens, logprobs, top_logprobs = toysubmission_generate(
         model,
         encoded,
         input_data.max_new_tokens,
