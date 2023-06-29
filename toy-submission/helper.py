@@ -1,18 +1,15 @@
 import sys
-import time
-import warnings
 from pathlib import Path
 from typing import Optional, Tuple, List
 
-import lightning as L
 import torch
 
 # support running without installing as a package
 wd = Path(__file__).parent.parent.resolve()
 sys.path.append(str(wd))
 
-from lit_llama import LLaMA, Tokenizer
-from lit_llama.utils import lazy_load, llama_model_lookup, quantization
+from lit_llama import LLaMA
+
 
 @torch.no_grad()
 def toysubmission_generate(
@@ -59,7 +56,6 @@ def toysubmission_generate(
 
         xm.mark_step()
 
-    generated_tokens = []
     top_logprob = []
     logprob = []
 

@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir --upgrade -r fast_api_requirements.txt
 
 # Install any needed packages specified in requirements.txt that come from lit-llama
 RUN apt-get update && apt-get install -y git
+# lit-llama reqs file is borked
+RUN pip install torch numpy scipy
 RUN pip install -r requirements.txt
 
 # get open-llama weights

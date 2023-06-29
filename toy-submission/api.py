@@ -13,8 +13,7 @@ class ProcessRequest(BaseModel):
     seed: Optional[int] = None
 
 
-@dataclass
-class Token:
+class Token(BaseModel):
     text: str
     logprob: float
     top_logprob: Dict[str, float]

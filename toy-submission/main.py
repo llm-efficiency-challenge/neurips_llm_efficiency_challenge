@@ -4,6 +4,24 @@ from fastapi import FastAPI
 
 import logging
 
+# Lit-llama imports
+import sys
+import time
+from pathlib import Path
+
+
+# support running without installing as a package
+wd = Path(__file__).parent.parent.resolve()
+sys.path.append(str(wd))
+
+import lightning as L
+import torch
+
+torch.set_float32_matmul_precision("high")
+
+from lit_llama import LLaMA, Tokenizer
+from lit_llama.utils import lazy_load, llama_model_lookup, quantization
+
 
 # Toy submission imports
 from helper import toysubmission_generate
@@ -14,24 +32,6 @@ from api import (
     TokenizeResponse,
     Token,
 )
-
-
-# Lit-llama imports
-import sys
-import time
-from pathlib import Path
-
-import lightning as L
-import torch
-
-torch.set_float32_matmul_precision("high")
-
-# support running without installing as a package
-wd = Path(__file__).parent.parent.resolve()
-sys.path.append(str(wd))
-
-from lit_llama import LLaMA, Tokenizer
-from lit_llama.utils import lazy_load, llama_model_lookup, quantization
 
 app = FastAPI()
 
@@ -93,22 +93,18 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
     )
 
     logger.info(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
-    tokens = []
+    generated_tokens = []
     for t, lp, tlp in zip(tokens, logprobs, top_logprobs):
         idx, val = tlp
-        tok_str = tokenizer.decode(idx)
+        tok_str = tokenizer.processor.decode([idx])
         token_tlp = {tok_str: val}
-        tokens.append(
+        generated_tokens.append(
             Token(text=tokenizer.decode(t), logprob=lp, top_logprob=token_tlp)
         )
-    tokens = [
-        Token(text=tokenizer.decode(t), logprob=lp, top_logprob=dict([tlp]))
-        for t, lp, tlp in zip(tokens, logprobs, top_logprobs)
-    ]
     logprobs_sum = sum(logprobs)
     # Process the input data here
     return ProcessResponse(
-        text=output, tokens=tokens, logprob=logprobs_sum, request_time=t
+        text=output, tokens=generated_tokens, logprob=logprobs_sum, request_time=t
     )
 
 
