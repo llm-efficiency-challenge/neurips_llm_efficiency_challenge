@@ -4,6 +4,17 @@ This toy-submission contains a dockerfile that exposes a HTTP server. Requests w
 ### Getting Started
 Make sure you have recursively clone the top this repository in order to get lit-llama. 
 
+❗ Make sure the repo is cloned with git submodule support either:
+
+```sh
+git clone --recurse-submodules ...
+```
+
+or if you cloned the repo but are missing the `lit-llama` folder
+
+```sh
+git submodule update --init --recursive
+```
 
 ### Structure
 * lit-llama/ 
@@ -14,6 +25,7 @@ Make sure you have recursively clone the top this repository in order to get lit
     * Applies logic on top of lit-llama's generate in order to produce responses in accordance with the spec.
 * api.py
     * Defines the pydantic classes for the FASTapi server
+  
 ### Make your GPUs visible to Docker 
 ```
 nvidia-ctk runtime configure
