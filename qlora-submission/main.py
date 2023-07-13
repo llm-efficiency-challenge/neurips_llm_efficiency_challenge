@@ -35,8 +35,8 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-adapter_path, _ = get_last_checkpoint('qlora/output/guanaco-7b')
-# adapter_path = 'timdettmers/guanaco-7b' # If you want to skip training, you can jsut load this model from the Hub.
+# adapter_path, _ = get_last_checkpoint('qlora/output/guanaco-7b')
+adapter_path = 'timdettmers/guanaco-7b' # If you want to skip training, you can jsut load this model from the Hub.
 model_name_or_path = 'huggyllama/llama-7b'
 
 t0 = time.time()
@@ -74,7 +74,6 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
             return_dict_in_generate=True,
         )
     )
-    import pdb; pdb.set_trace()
     t = time.perf_counter() - t0
     
     # Extract tokens
