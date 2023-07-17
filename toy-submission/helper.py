@@ -1,23 +1,15 @@
-import sys
-from pathlib import Path
 from typing import Optional, Tuple, List
 
 import torch
 
-# support running without installing as a package
-wd = Path(__file__).parent.parent.resolve()
-sys.path.append(str(wd))
-
-from lit_llama import LLaMA
-
 
 @torch.no_grad()
 def toysubmission_generate(
-    model: LLaMA,
+    model: torch.nn.Module,
     idx: torch.Tensor,
-    max_new_tokens: int,
+    max_returned_tokens: int,
+    max_seq_length: int,
     *,
-    max_seq_length: Optional[int] = None,
     temperature: float = 1.0,
     top_k: Optional[int] = None,
     eos_id: Optional[int] = None,
@@ -29,38 +21,30 @@ def toysubmission_generate(
     Args:
         model: The model to use.
         idx: Tensor of shape (T) with indices of the prompt sequence.
-        max_new_tokens: The number of new tokens to generate.
-        max_seq_length: The maximum sequence length allowed.
-        temperature: Scales the predicted logits by 1 / temperature
-        top_k: If specified, only sample among the tokens with the k highest probabilities
-        eos_id: If specified, stop generating any more token once the <eos> token is triggered
+        max_returned_tokens: The maximum number of tokens to return (given plus generated).
+        max_seq_length: The maximum sequence length allowed. Should be less or equal than the block size.
+        temperature: Scales the predicted logits by 1 / temperature.
+        top_k: If specified, only sample among the tokens with the k highest probabilities.
+        eos_id: If specified, stop generating any more token once the <eos> token is triggered.
 
     Returns:
-        Tuple containing a list of token indexes, id of the top log probability, and the actual log probability of the selected token.
+        Tuple containing a list of token indexes, id of the top log probability, and the actual log probability of the
+        selected token.
     """
-    # create an empty tensor of the expected final shape and fill in the current tokens
     T = idx.size(0)
-    T_new = T + max_new_tokens
-    if max_seq_length is None:
-        max_seq_length = min(T_new, model.config.block_size)
-
+    assert max_returned_tokens > T
     device, dtype = idx.device, idx.dtype
     # create an empty tensor of the expected final shape and fill in the current tokens
-    empty = torch.empty(T_new, dtype=dtype, device=device)
+    empty = torch.empty(max_returned_tokens, dtype=dtype, device=device)
     empty[:T] = idx
     idx = empty
     input_pos = torch.arange(0, T, device=device)
 
-    if idx.device.type == "xla":
-        import torch_xla.core.xla_model as xm
-
-        xm.mark_step()
-
     top_logprob = []
     logprob = []
 
-    # generate max_new_tokens tokens
-    for _ in range(max_new_tokens):
+    # generate up to a fixed number of tokens
+    for _ in range(max_returned_tokens - T):
         x = idx.index_select(0, input_pos).view(1, -1)
 
         # forward
@@ -84,9 +68,6 @@ def toysubmission_generate(
 
         # advance
         input_pos = input_pos[-1:] + 1
-
-        if idx.device.type == "xla":
-            xm.mark_step()
 
         # concatenate the new generation
         idx = idx.index_copy(0, input_pos, idx_next)

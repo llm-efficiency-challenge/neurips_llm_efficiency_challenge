@@ -10,7 +10,7 @@ This repository contains a toy submission for the Neurips 1 LLM 1 GPU Competitio
 
 ## Submission
 
-The submission in this repository is a basic implementation of the setting up a HTTP server in accordance to the open_api spec. It includes a sample solution built off of lit-llama and open-llama weights that participants can reference or modify as they see fit.
+The submission in this repository is a basic implementation of the setting up a HTTP server in accordance to the open_api spec. It includes a sample solution built off of [Lit-GPT](https://github.com/Lightning-AI/lit-gpt) and open-llama weights that participants can reference or modify as they see fit.
 
 ## Usage
 
