@@ -18,13 +18,16 @@ git submodule update --init --recursive
 
 ### Structure
 * lit-gpt/ 
-    * unmodified submodule
+    * unmodified submodule that contains a hackable `torch.nn.Module` GPT definition as well as optional fine-tuning
+      and inference code.
 * main.py
     * The process/ and tokenize/ endpoints are defined here
 * helper.py
     * Applies logic on top of lit-gpt's generate in order to produce responses in accordance with the spec.
 * api.py
     * Defines the pydantic classes for the FASTapi server
+* Dockerfile
+    * Definition of the image that will set-up the server used for submissions
   
 ### Make your GPUs visible to Docker 
 Follow this guide to install [nvidia-ctk](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
