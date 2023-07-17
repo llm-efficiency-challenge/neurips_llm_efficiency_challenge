@@ -1,6 +1,6 @@
 # Neurips 1 LLM 1 GPU Challenge
 
-This repository contains a toy submission for the Neurips 1 LLM 1 GPU Competition. It provides a simple implementation that serves as a starting point for participants to understand the problem and build their own solutions.
+This repository contains a toy submission for the [NeurIPS 1 LLM 1 GPU Competition](https://llm-efficiency-challenge.github.io/). It provides a simple implementation that serves as a starting point for participants to understand the problem and build their own solutions.
 
 ## Contents
 
