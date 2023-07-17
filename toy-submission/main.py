@@ -1,14 +1,12 @@
-from typing import Union
-from pathlib import Path
 from fastapi import FastAPI
 
 import logging
 
-# Lit-llama imports
+# Lit-GPT imports
 import sys
 import time
 from pathlib import Path
-
+import json
 
 # support running without installing as a package
 wd = Path(__file__).parent.parent.resolve()
@@ -19,9 +17,8 @@ import torch
 
 torch.set_float32_matmul_precision("high")
 
-from lit_llama import LLaMA, Tokenizer
-from lit_llama.utils import lazy_load, llama_model_lookup, quantization
-
+from lit_gpt import GPT, Tokenizer, Config
+from lit_gpt.utils import lazy_load, quantization
 
 # Toy submission imports
 from helper import toysubmission_generate
@@ -39,29 +36,27 @@ logger = logging.getLogger(__name__)
 # Configure the logging module
 logging.basicConfig(level=logging.INFO)
 
-quantize = "llm.int8"
+quantize = "bnb.nf4-dq"  # 4-bit NormalFloat with Double-Quantization (see QLoRA paper)
+checkpoint_dir = Path("checkpoints/openlm-research/open_llama_3b")
+precision = "bf16-true"  # weights and data in bfloat16 precision
 
-checkpoint_path = Path("checkpoints/lit-llama/7B/lit-llama.pth")
-tokenizer_path: Path = Path("checkpoints/lit-llama/tokenizer.model")
+fabric = L.Fabric(devices=1, accelerator="cuda", precision=precision)
 
-precision = "bf16-true"
-fabric = L.Fabric(devices=1, precision=precision)
+with open(checkpoint_dir / "lit_config.json") as fp:
+    config = Config(**json.load(fp))
 
-logger.info("Loading model ...")
-t0 = time.time()
+checkpoint_path = checkpoint_dir / "lit_model.pth"
+logger.info(f"Loading model {str(checkpoint_path)!r} with {config.__dict__}")
+with fabric.init_module(empty_init=True), quantization(quantize):
+    model = GPT(config)
+
 with lazy_load(checkpoint_path) as checkpoint:
-    name = llama_model_lookup(checkpoint)
-
-    with fabric.init_module(empty_init=True), quantization(mode=quantize):
-        model = LLaMA.from_name(name)
-
-    model.load_state_dict(checkpoint)
-logger.info(f"Time to load model: {time.time() - t0:.02f} seconds.")
+    model.load_state_dict(checkpoint, strict=quantize is None)
 
 model.eval()
 model = fabric.setup(model)
 
-tokenizer = Tokenizer(tokenizer_path)
+tokenizer = Tokenizer(checkpoint_dir)
 
 
 @app.post("/process")
@@ -73,12 +68,18 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
         input_data.prompt, bos=True, eos=False, device=fabric.device
     )
     prompt_length = encoded.size(0)
-    # for i in range(input_data.num_samples):
+    max_returned_tokens = prompt_length + input_data.max_new_tokens
+    assert max_returned_tokens <= model.config.block_size, (
+        max_returned_tokens,
+        model.config.block_size,
+    )  # maximum rope cache length
+
     t0 = time.perf_counter()
     tokens, logprobs, top_logprobs = toysubmission_generate(
         model,
         encoded,
-        input_data.max_new_tokens,
+        max_returned_tokens,
+        max_seq_length=max_returned_tokens,
         temperature=input_data.temperature,
         top_k=input_data.top_k,
     )

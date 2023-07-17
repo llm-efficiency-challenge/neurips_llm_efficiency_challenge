@@ -1,3 +1,3 @@
-[submodule "toy-submission/lit-llama"]
-	path = toy-submission/lit-llama
-	url = https://github.com/Lightning-AI/lit-llama.git
+[submodule "toy-submission/lit-gpt"]
+	path = toy-submission/lit-gpt
+	url = https://github.com/Lightning-AI/lit-gpt
