@@ -2,7 +2,7 @@
 
 This repository contains a toy submission for the [NeurIPS 1 LLM 1 GPU Competition](https://llm-efficiency-challenge.github.io/). It provides a simple implementation that serves as a starting point for participants to understand the problem and build their own solutions.
 
-At a high level the key thing you will contribute is a `Dockerfile`, which will be a reproducible artifact that we can use to test your submission. The `Dockerfile` should contain all the code and dependencies needed to run your submission. We will use this `Dockerfile` to build a docker image and then run it against a set of tasks. The tasks will be a subset of the [HELM](https://crfm.stanford.edu/helm/latest/) tasks. We will run your submission against the tasks and then evaluate the results.
+At a high level the key thing you will contribute is a `Dockerfile`, which will be a reproducible artifact that we can use to test your submission. The `Dockerfile` should contain all the code and dependencies needed to run your submission. We will use this `Dockerfile` to build a docker image and then run it against a set of tasks which will be a subset of the [HELM](https://crfm.stanford.edu/helm/latest/) tasks.
 
 Your `Dockerfile` will expose a simple HTTP server, which needs to implement 2 endpoints `/process` and `/tokenize`. We will build that `Dockerfile` and expect it to launch an HTTP server. Once that server is launched, we will make requests to it via HELM and record your results.
 
