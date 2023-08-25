@@ -2,7 +2,7 @@
 
 ## Install the NeurIPS client
 
-Install HELM from our branch: `pip install git+https://github.com/drisspg/helm.git@neruips_client`
+Install HELM: `pip install git+https://github.com/stanford-crfm/helm.git`
 
 
 ## Setup an HTTP server
