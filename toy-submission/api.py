@@ -10,6 +10,7 @@ class ProcessRequest(BaseModel):
     top_k: int = 200
     temperature: float = 0.8
     seed: Optional[int] = None
+    echo_prompt: Optional[bool]
 
 
 class Token(BaseModel):
