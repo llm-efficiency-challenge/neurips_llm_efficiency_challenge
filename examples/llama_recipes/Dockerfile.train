@@ -1,0 +1,32 @@
+FROM ghcr.io/pytorch/pytorch-nightly:c69b6e5-cu11.8.0
+
+RUN apt-get update  && apt-get install -y git
+
+RUN apt-get update  && apt-get install -y python3-virtualenv
+
+ENV VIRTUAL_ENV=/opt/venv
+
+RUN python -m venv $VIRTUAL_ENV
+
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN pip install -U --no-cache-dir git+https://github.com/facebookresearch/llama-recipes.git
+
+
+RUN apt-get update  && apt-get install -y wget
+
+WORKDIR /app
+
+RUN wget https://raw.githubusercontent.com/facebookresearch/llama-recipes/feature/oasst1_dataset/examples/custom_dataset.py
+
+ENV HF_DATASETS_CACHE="/workspace/hf_cache"
+ENV TRANSFORMERS_CACHE="/workspace/hf_cache"
+
+COPY run_training.sh /app/
+
+RUN chmod +x /app/run_training.sh
+
+WORKDIR /workspace
+
+CMD [ "/bin/bash", "-e", "/app/run_training.sh"]
+
