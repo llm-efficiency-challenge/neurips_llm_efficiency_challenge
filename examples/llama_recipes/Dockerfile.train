@@ -1,4 +1,4 @@
-FROM ghcr.io/pytorch/pytorch-nightly:c69b6e5-cu11.8.0
+FROM ghcr.io/pytorch/pytorch-nightly:b3874ab-cu11.8.0
 
 RUN apt-get update  && apt-get install -y git python3-virtualenv wget 
 
