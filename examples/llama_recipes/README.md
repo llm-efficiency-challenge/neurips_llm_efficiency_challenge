@@ -20,13 +20,8 @@ export  HUGGINGFACE_TOKEN="YOUR_HUGGINGFACE_TOKEN"
 Make sure that the token allows read access to meta-llama/Llama-2-7b-hf.
 
 # Fine-tune the model
-Fine-tuning the model on one of the preconfigured datasets can than be done with a single line command line:
-```bash
-python -m llama_recipes.finetuning  --use_peft --peft_method lora --quantization --model_name meta-llama/Llama-2-7b-hf --output_dir peft_model_output
-```
-
-To use load a custom dataset we need to implement a function (get_custom_datset) following [this](https://github.com/facebookresearch/llama-recipes/blob/main/examples/custom_dataset.py) example.
-We can than train on this dataset using this command line:
+With llama-recipes its possible to fine-tune Llama on custom data with a single command. To fine-tune on a custom dataset we need to implement a function (get_custom_dataset) that provides the custom dataset following this example [custom_dataset.py](https://github.com/facebookresearch/llama-recipes/blob/main/examples/custom_dataset.py).
+We can then train on this dataset using this command line:
 ```bash
 python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantization --model_name meta-llama/Llama-2-7b --dataset custom_dataset --custom_dataset.file /workspace/custom_dataset.py --output_dir /volume/output_dir
 ```
