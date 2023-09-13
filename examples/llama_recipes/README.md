@@ -34,14 +34,14 @@ To build and run the taining Docker we need to execute:
 docker build -f ./Dockerfile.train -t llama_recipes_train .
 
 export HUGGINGFACE_TOKEN="YOUR_HUGGINGFACE_TOKEN"
-docker run --gpus all --rm -ti -v ./:/volume -e HUGGINGFACE_TOKEN=$HUGGINGFACE_TOKEN  llama_recipes_train
+docker run --gpus "device=0" --rm -ti -v ./:/volume -e HUGGINGFACE_TOKEN=$HUGGINGFACE_TOKEN  llama_recipes_train
 ```
 
 The inferenc Docker is created and started with:
 ```bash
 docker build -f ./Dockerfile.inference -t llama_recipes_inference .
 
-docker run --gpus all -p 8080:80 --volume ./:/volume -e HUGGINGFACE_TOKEN=$HUGGINGFACE_TOKEN llama_recipes_inference
+docker run --gpus "device=0" -p 8080:80 --volume ./:/volume -e HUGGINGFACE_TOKEN=$HUGGINGFACE_TOKEN llama_recipes_inference
 ```
 
 To test the inference docker we can run this query:
