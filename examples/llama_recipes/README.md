@@ -26,6 +26,8 @@ We can then train on this dataset using this command line:
 python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantization --model_name meta-llama/Llama-2-7b --dataset custom_dataset --custom_dataset.file /workspace/custom_dataset.py --output_dir /volume/output_dir
 ```
 
+**Note** The custom dataset in this example is dialog based. This is only due to the nature of the example but not a necessity of the custom dataset functionality. To see other examples of get_custom_dataset functions (btw the name of the function get_custom_dataset can be changed in the command line by using this syntax: /workspace/custom_dataset.py:get_foo_dataset) have a look at the [built-in dataset in llama-recipes](https://github.com/facebookresearch/llama-recipes/blob/main/src/llama_recipes/datasets/__init__.py).
+
 # Create submission
 The creation of a submission will be split in two Dockerfiles. The training Docker will perform a fine tuning with the LoRA method and load the base Llama weight before training. The resulting LoRA weights are then saved on a volume that mounts a folder from the host file system. The inference Docker will copy the LoRA weights into the Docker to create a self-sufficient Docker which only depends on the access token to download the Llama 2 base weights from the HuggingFace hub.
 
