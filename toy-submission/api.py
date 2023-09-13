@@ -35,3 +35,12 @@ class TokenizeRequest(BaseModel):
 class TokenizeResponse(BaseModel):
     tokens: List[int]
     request_time: float
+
+
+class DecodeRequest(BaseModel):
+    tokens: List[int]
+
+
+class DecodeResponse(BaseModel):
+    text: str
+    request_time: float

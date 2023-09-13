@@ -28,6 +28,8 @@ from api import (
     TokenizeRequest,
     TokenizeResponse,
     Token,
+    DecodeRequest,
+    DecodeResponse
 )
 
 app = FastAPI()
@@ -122,3 +124,13 @@ async def tokenize(input_data: TokenizeRequest) -> TokenizeResponse:
     t = time.perf_counter() - t0
     tokens = encoded.tolist()
     return TokenizeResponse(tokens=tokens, request_time=t)
+
+
+@app.post("/decode")
+async def decode(input_data: DecodeRequest) -> DecodeResponse:
+    logger.info("Using device: {}".format(fabric.device))
+    t0 = time.perf_counter()
+    # decoded = tokenizer.decode(torch.Tensor(input_data.tokens))
+    decoded = tokenizer.processor.decode(input_data.tokens)
+    t = time.perf_counter() - t0
+    return DecodeResponse(text=decoded, request_time=t)
