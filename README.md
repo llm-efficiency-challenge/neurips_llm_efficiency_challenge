@@ -70,7 +70,7 @@ The OpenAPI specification provides a standardized way to describe the API, makin
 
 ## Discord Leaderboard
 
-The [Lightning.ai](https://lightning.ai/) has built a Discord based for us. You can find it on discord by its name `evalbot#4372`.
+The [Lightning AI](https://lightning.ai/) has built a Discord based for us. You can find it on discord by its name `evalbot#4372`.
 
 You can interact with it by DM'ing it with a zipped file of your sample submission and message it to either `eval A100` or `eval 4090`. More details on the bot are [here](https://discord.com/channels/1124130156336922665/1124134272631054447/1151718598818156645)
 
