@@ -90,3 +90,5 @@ Once the organizers have identified a shortlist of strong submissions, we will m
 [AWS](https://aws.amazon.com/) has graciously agreed to provide $500 in AWS credits to 25 participating teams in the LLM efficiency competition. You will be able to pick and choose from available hardware to experiment before you make your final submission. To be eligible, please make sure to sign up at https://llm-efficiency-challenge.github.io/submission and write a short proposal in your `README.md` and add [@jisaacso](https://github.com/jisaacso) to your repos who will review your proposals.
 
 We'll be prioritizing the first teams with serious proposals. Good luck!
+
+There are some other free ways of getting GPUs that people have posted on discord [here](https://discord.com/channels/1124130156336922665/1149283885524463637/1149283885524463637) and you can shop around for both 4090 and A100 on cloud on [https://cloud-gpus.com/](https://cloud-gpus.com/)
