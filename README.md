@@ -38,7 +38,7 @@ The submission in this repository is a basic implementation of the setting up an
 
 You can use the provided code as a reference or starting point for your own implementation. The `main.py` file contains the simple FastAPI server, and you can modify it to suit your needs.
 
-You can find the Lit-GPT submission [here](sample-submissions/lit-gpt/) with instructions on how to run it locally.
+You can find the Lit-GPT submission [here](sample-submissions/lit-gpt/) and the llama-recipes submission [here](sample-submissions/llama_recipes/) with instructions on how to run each locally.
 
 Make sure that your final submission has only a single `Dockerfile` and that your weights are not directly included in the repo, they need to be downloaded during docker build or at runtime.
 
@@ -74,7 +74,7 @@ The [Lightning.ai](https://lightning.ai/) has built a Discord based for us. You 
 
 You can interact with it by DM'ing it with a zipped file of your sample submission and message it to either `eval A100` or `eval 4090`. More details on the bot are [here](https://discord.com/channels/1124130156336922665/1124134272631054447/1151718598818156645)
 
-Once you make a submission the bot will inform you whether your submission failed or succeeded and after a few hours will publicly post your results. If you're at the top of the queue you can expect the eval to take 1-2h but depending on the size of the queue this could be longer.
+Once you make a submission the bot will inform you whether your submission failed or succeeded and after a few hours will publicly post your results. If you're at the top of the queue you can expect the eval to take 1-2h but depending on the size of the queue this could be longer. So please be mindful to not hurt other competitors trying to use the limited amount of hardware and ensure that your submissions work locally first.
 
 Your submission will remain private to other competitors.
 
