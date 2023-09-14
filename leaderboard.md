@@ -2,7 +2,7 @@
 
 
 ## How to use the leaderboard
-The Lightning.ai team has built us a leaderboard on Discord. This is the single best way you can make sure your submissions actually work before the submission, try to beat the unfinetuned toy submission as a starting point.
+The [Lightning AI](https://lightning.ai/) team has built us a leaderboard on Discord. This is the single best way you can make sure your submissions actually work before the submission, try to beat the unfinetuned toy submission as a starting point.
 
 You might have noticed a new friendly bot has joined the server called @evalbot  to use it
 1. DM the bot with `eval 4090` or `eval A100` and attach a zipped file of your submission to the message (You can also just openly message the bot but DM'ing will protect your secret sauce)
