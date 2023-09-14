@@ -7,7 +7,7 @@ Install HELM: `pip install git+https://github.com/stanford-crfm/helm.git`
 
 ## Setup an HTTP server
 
-Follow instructions in [toy-submission](/toy-submission/) to setup a simple HTTP client that can use to local tests
+Follow instructions in [toy-submission](/sample-submissions/lit-gpt/) to setup a simple HTTP client that can use to local tests
 
 ## Configure HELM
 

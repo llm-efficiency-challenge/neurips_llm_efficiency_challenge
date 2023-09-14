@@ -1,9 +1,10 @@
 # Llama-recipes example
-This example demonstrates how to fine-tune and serve a Llama 2 model with llama-recipes for submission in the LLM efficiency challenge using the [toy-submission](../../toy-submission/) as a template.
+This example demonstrates how to fine-tune and serve a Llama 2 model with llama-recipes for submission in the LLM efficiency challenge using the [lit-gpt](../toy-submission/) example as a template.
 Llama-recipes provides an easy way to fine-tune a Llama 2 model with custom datasets using efficient techniques like LoRA or Llama-adapters.
 
 # Getting started
 In order to use llama-recipes we need to install the following pip package:
+
 ```
 pip install llama-recipes
 ```
@@ -17,11 +18,13 @@ When running the Docker, the token will be expected in an environment variable t
 ```bash
 export  HUGGINGFACE_TOKEN="YOUR_HUGGINGFACE_TOKEN"
 ```
-Make sure that the token allows read access to meta-llama/Llama-2-7b-hf.
+
+Make sure that the token allows read access to `meta-llama/Llama-2-7b-hf`.
 
 # Fine-tune the model
 With llama-recipes its possible to fine-tune Llama on custom data with a single command. To fine-tune on a custom dataset we need to implement a function (get_custom_dataset) that provides the custom dataset following this example [custom_dataset.py](https://github.com/facebookresearch/llama-recipes/blob/main/examples/custom_dataset.py).
 We can then train on this dataset using this command line:
+
 ```bash
 python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantization --model_name meta-llama/Llama-2-7b --dataset custom_dataset --custom_dataset.file /workspace/custom_dataset.py --output_dir /volume/output_dir
 ```
@@ -32,6 +35,7 @@ python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantizatio
 The creation of a submission will be split in two Dockerfiles. The training Docker will perform a fine tuning with the LoRA method and load the base Llama weight before training. The resulting LoRA weights are then saved on a volume that mounts a folder from the host file system. The inference Docker will copy the LoRA weights into the Docker to create a self-sufficient Docker which only depends on the access token to download the Llama 2 base weights from the HuggingFace hub.
 
 To build and run the taining Docker we need to execute:
+
 ```bash
 docker build -f ./Dockerfile.train -t llama_recipes_train .
 
@@ -39,7 +43,8 @@ export HUGGINGFACE_TOKEN="YOUR_HUGGINGFACE_TOKEN"
 docker run --gpus "device=0" --rm -ti -v ./:/volume -e HUGGINGFACE_TOKEN=$HUGGINGFACE_TOKEN  llama_recipes_train
 ```
 
-The inferenc Docker is created and started with:
+The inference Docker is created and started with:
+
 ```bash
 docker build -f ./Dockerfile.inference -t llama_recipes_inference .
 
@@ -47,6 +52,7 @@ docker run --gpus "device=0" -p 8080:80 --volume ./:/volume -e HUGGINGFACE_TOKEN
 ```
 
 To test the inference docker we can run this query:
+
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"text": "[INST]Was is the capital of france?[/INST] "}' http://localhost:8080/tokenize
 ```
