@@ -6,10 +6,10 @@ At a high level the key thing you will contribute is a `Dockerfile`, which will 
 
 Your `Dockerfile` will expose a simple HTTP server, which needs to implement 2 endpoints `/process` and `/tokenize`. We will build that `Dockerfile` and expect it to launch an HTTP server. Once that server is launched, we will make requests to it via HELM and record your results.
 
-At a high level the flow you should follow to ensure a strong submission is
+At a high level the flow you should follow to ensure a strong submission:
 1. Pick approved LLMs and datasets from [here](https://llm-efficiency-challenge.github.io/challenge)
 2. Start with one of [sample-submissions](sample-submissions) and make sure it runs
-3. Evaluate it locally on your own A100 or 4090, if you don't have funding for either please see the [GPU funding](#gpu-funding) section for some more options
+3. Evaluate it locally on your own 40Gb A100 or 4090, if you don't have funding for either please see the [GPU funding](#gpu-funding) section for some more options
 4. Once you have something working you can make a submission on our [Discord Leaderboard](https://discord.com/channels/1124130156336922665/1124134272631054447/1151718598818156645) to see how you fare up against other competitors
 5. On the competition deadline make sure you have the final eval Dockerfile you'd like us to run in your github repo, refer to the [timeline](https://llm-efficiency-challenge.github.io/dates)
 6. If your entry makes the shortlist, we will work with you to reproduce all of your artifacts with another finetuning Dockerfile
@@ -18,12 +18,12 @@ At a high level the flow you should follow to ensure a strong submission is
 
 - [Approved LLM & Dataset](#approved-llm-and-dataset)
 - [Submission](#submission)
-- [Eval locally](#eval-locally-helm)
+- [Evaluate Your Model Locally Using HELM](#evaluate-your-model-locally-using-helm)
 - [Finetune](#finetune)
-- [Create your own submission template](#your-own-submission-template)
+- [Create your own submission template](#create-your-own-submission-template)
 - [Discord Leaderboard](#discord-leaderboard)
-- [Final eval submission](#final-eval-submission)
-- [Final finetune submission](#final-finetune-submission)
+- [Final Leaderboard Submission](#final-eval-submission)
+- [Evaluating the Final Submission](#evaluating-the-final-submission)
 - [GPU funding](#gpu-funding)
 
 ## Approved LLM and dataset
@@ -40,7 +40,9 @@ You can use the provided code as a reference or starting point for your own impl
 
 You can find the Lit-GPT submission [here](sample-submissions/lit-gpt/) with instructions on how to run it locally.
 
-## Eval locally HELM
+Make sure that your final submission has only a single `Dockerfile` and that your weights are not directly included in the repo, they need to be downloaded during docker build or at runtime.
+
+## Evaluate Your Model Locally Using HELM
 
 Every submission will be tested against [HELM](https://crfm.stanford.edu/helm/latest/) which is a standard suite to evaluate LLMs on a broad set of datasets. This competition will leverage HELM for its evaluation infrastructure. The organizers will leverage standard STEM tasks from HELM although we will keep the exact set a secret and in addition we'll be including some heldout tasks that are presently not in HELM.
 
@@ -57,9 +59,9 @@ It's likely that an untuned base model won't give you satisfactory results, in t
 2. [llama-recipes](/sample-submissions/llama_recipes/)
 
 
-### Your own submission template
+### Create Your Own Submission Template
 
-Note that we've offered 2 sample submissions, our evaluation infrastructure is generic and only assumes an HTTP client so you can use a finetuning framework in python like the ones we've suggested but also any non based python framework you like using.
+Note that we've offered 2 sample submissions, our evaluation infrastructure is generic and only assumes an HTTP client so you can use a finetuning framework in Python like the ones we've suggested but also any non based Python framework you like using.
 
 The `openapi.json` file in this repository contains the OpenAPI specification for the Competition API. Competitors can use this specification to understand the API endpoints, request and response structures, and overall requirements for interacting with the competition platform.
 
@@ -72,16 +74,19 @@ The [Lightning.ai](https://lightning.ai/) has built a Discord based for us. You 
 
 You can interact with it by DM'ing it with a zipped file of your sample submission and message it to either `eval A100` or `eval 4090`. More details on the bot are [here](https://discord.com/channels/1124130156336922665/1124134272631054447/1151718598818156645)
 
-Once you make a submission the bot will inform you whether your submission failed or succeeded and after a few hours will publicly post your results. Your submission will remain private to other competitors.
+Once you make a submission the bot will inform you whether your submission failed or succeeded and after a few hours will publicly post your results. If you're at the top of the queue you can expect the eval to take 1-2h but depending on the size of the queue this could be longer.
+
+Your submission will remain private to other competitors.
 
 The end to end flow is described [here](leaderboard.md)
 
-## Final Eval Submission
+## Final Leaderboard Submission
 
-When you registered for the competition you would have needed to create a github repo with your `Dockerfile`, in case the location is ambiguous please sure to let us know in your `README.md`. The organizers will take your `Dockerfile` and run it as is and compute a baseline eval score. The purpose of this step is to primarily filter out broken submissions or submissions that can't outperform the unfinetuned sample submissions.
+When you registered for the competition you would have needed to create a github repo. When the submission deadline is reached make sure your Github repo has a `Dockerfile`, in case the location is ambiguous please sure to let us know in your `README.md`. The organizers will take your `Dockerfile` and run it as is and compute a baseline eval score. The purpose of this step is to primarily filter out broken submissions or submissions that can't outperform the unfinetuned sample submissions.
 
+The deadline is on Oct 15 2023 with important dates listed [here](https://llm-efficiency-challenge.github.io/dates)
 
-## Final Finetune Submission
+## Evaluating the Final Submission
 
 Once the organizers have identified a shortlist of strong submissions, we will message you directly for another `Dockerfile` that would reproduce all of your artifacts. The best submission among this shortlist will win the competition and be invited to present their work at NeurIPS at our workshop.
 
