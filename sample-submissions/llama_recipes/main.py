@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 
 login(token=os.environ["HUGGINGFACE_TOKEN"])
 
-model = load_model('meta-llama/Llama-2-7b', True)
+model = load_model('meta-llama/Llama-2-7b-hf', True)
 model = load_peft_model(model, '/workspace/output_dir')
 
 model.eval()
@@ -65,8 +65,11 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
         )
     
     t = time.perf_counter() - t0
-
-    output = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+    if not input_data.echo_prompt:
+        output = tokenizer.decode(outputs.sequences[0][prompt_length:], skip_special_tokens=True)
+    else:
+        output = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+        
     tokens_generated = outputs.sequences[0].size(0) - prompt_length
     logger.info(
         f"Time for inference: {t:.02f} sec total, {tokens_generated / t:.02f} tokens/sec"
