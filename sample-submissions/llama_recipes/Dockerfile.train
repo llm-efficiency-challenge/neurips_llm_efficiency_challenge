@@ -2,19 +2,16 @@ FROM ghcr.io/pytorch/pytorch-nightly:b3874ab-cu11.8.0
 
 RUN apt-get update  && apt-get install -y git python3-virtualenv wget 
 
-ENV VIRTUAL_ENV=/opt/venv
-RUN python -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-RUN pip install -U --no-cache-dir git+https://github.com/facebookresearch/llama-recipes.git@c33ea3cacb607a8b3cf9090b756504f869db8b9c
-
-WORKDIR /workspace
-RUN wget https://raw.githubusercontent.com/facebookresearch/llama-recipes/main/examples/custom_dataset.py
-
-ENV HF_DATASETS_CACHE="/volume/hf_cache"
-ENV TRANSFORMERS_CACHE="/volume/hf_cache"
+RUN pip install -U --no-cache-dir git+https://github.com/facebookresearch/llama-recipes.git@18e019862664226bcbc7519ba62460825a529efe
 
 WORKDIR /workspace
 
-CMD [ "/bin/bash", "-e", "-c","huggingface-cli login --token $HUGGINGFACE_TOKEN && python3 -m llama_recipes.finetuning  --model_name meta-llama/Llama-2-7b-hf --use_peft --peft_method lora --quantization --batch_size_training 2 --dataset custom_dataset --custom_dataset.file /workspace/custom_dataset.py --output_dir /volume/output_dir"]
+COPY custom_dataset.py ./
+
+ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
+ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
+
+COPY train.py ./
+
+CMD [ "python", "train.py"]
 

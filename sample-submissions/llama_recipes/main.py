@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO)
 login(token=os.environ["HUGGINGFACE_TOKEN"])
 
 model = load_model('meta-llama/Llama-2-7b-hf', True)
-model = load_peft_model(model, '/workspace/output_dir')
+model = load_peft_model(model, os.environ["HUGGINGFACE_REPO"])
 
 model.eval()
 
