@@ -4,7 +4,7 @@
 FROM ghcr.io/pytorch/pytorch-nightly:c69b6e5-cu11.8.0
 
 # Set the working directory in the container to /submission
-WORKDIR /submission
+WORKDIR /sample-submissions
 
 # Copy the specific file into the container at /submission
 COPY /lit-gpt/ /submission/
