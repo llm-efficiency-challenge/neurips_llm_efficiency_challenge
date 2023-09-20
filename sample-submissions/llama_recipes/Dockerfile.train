@@ -1,12 +1,12 @@
 FROM ghcr.io/pytorch/pytorch-nightly:b3874ab-cu11.8.0
 
-RUN apt-get update  && apt-get install -y git python3-virtualenv wget 
+RUN apt-get update  && apt-get install -y git python3-virtualenv wget
 
 RUN pip install -U --no-cache-dir git+https://github.com/facebookresearch/llama-recipes.git@eafea7b366bde9dc3f0b66a4cb0a8788f560c793
 
 WORKDIR /workspace
 
-COPY custom_dataset.py ./
+RUN wget https://gist.githubusercontent.com/mreso/ec65015cbfbd395f0c2adc17147adf1f/raw/41070f1058820b9e89bae885968cc666a7d6aa59/custom_dataset.py
 
 ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
 ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
@@ -14,4 +14,3 @@ ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
 COPY train.py ./
 
 CMD [ "python", "train.py"]
-
