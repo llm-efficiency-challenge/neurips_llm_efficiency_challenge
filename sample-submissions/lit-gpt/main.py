@@ -71,24 +71,25 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
     )
     prompt_length = encoded.size(0)
     max_returned_tokens = prompt_length + input_data.max_new_tokens
-    assert max_returned_tokens <= model.config.block_size, (
-        max_returned_tokens,
-        model.config.block_size,
-    )  # maximum rope cache length
+
+    with fabric.init_tensor():
+        # set the max_seq_length to limit the memory usage to what we need
+        model.max_seq_length = max_returned_tokens
+        # enable the kv cache
+        model.set_kv_cache(batch_size=1)
+
 
     t0 = time.perf_counter()
     tokens, logprobs, top_logprobs = toysubmission_generate(
         model,
         encoded,
         max_returned_tokens,
-        max_seq_length=max_returned_tokens,
         temperature=input_data.temperature,
         top_k=input_data.top_k,
     )
 
     t = time.perf_counter() - t0
 
-    model.reset_cache()
     if input_data.echo_prompt is False:
         output = tokenizer.decode(tokens[prompt_length:])
     else:
