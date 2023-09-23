@@ -1,5 +1,5 @@
-# Toy Submission
-This toy-submission contains a dockerfile that exposes a HTTP server. Requests will be made against this server during the evaluation phase of the competition
+# Sample Submission
+This sample-submission contains a dockerfile that exposes a HTTP server. Requests will be made against this server during the evaluation phase of the competition
 
 ### Getting Started
 Make sure you have recursively cloned the top this repository in order to get lit-gpt. 
@@ -38,8 +38,8 @@ systemctl restart docker
 
 ### Build and run 
 ```sh
-docker build -t toy_submission .
-docker run --gpus all -p 8080:80 toy_submission
+docker build -t sample_submission .
+docker run --gpus all -p 8080:80 sample_submission
 ```
 ### Send requests
 ```sh
