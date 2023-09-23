@@ -8,6 +8,9 @@ WORKDIR /submission
 
 # Copy the specific file into the container at /submission
 COPY /lit-gpt/ /submission/
+RUN mkdir checkpoints
+RUN mkdir checkpoints/openlm-research
+RUN mkdir checkpoints/openlm-research/open_llama_3b
 
 # Setup server requriements
 COPY ./fast_api_requirements.txt fast_api_requirements.txt

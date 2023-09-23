@@ -48,7 +48,7 @@ def toysubmission_generate(
         x = idx.index_select(0, input_pos).view(1, -1)
 
         # forward
-        logits = model(x, max_seq_length, input_pos)
+        logits = model(x, input_pos)
         logits = logits[0, -1] / temperature
 
         # optionally crop the logits to only the top k options
