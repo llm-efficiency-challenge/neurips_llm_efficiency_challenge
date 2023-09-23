@@ -88,6 +88,7 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
 
     t = time.perf_counter() - t0
 
+    model.reset_cache()
     if input_data.echo_prompt is False:
         output = tokenizer.decode(tokens[prompt_length:])
     else:
