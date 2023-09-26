@@ -11,7 +11,7 @@ Follow instructions in [toy-submission](/sample-submissions/lit-gpt/) to setup a
 
 ## Configure HELM
 
-You can configure which datasets to run HELM on by editing a `run_specs.conf`, to run your model on a large set of datasets, take a look at https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/master/run_specs_coarse.conf for some inspiration.
+You can configure which datasets to run HELM on by editing a `run_specs.conf`, to run your model on a large set of datasets, take a look at https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/master/run_specs_full_coarse_600_examples.conf for some inspiration.
 
 Here's how you can create a simple one for the purposes of making sure that your Dockerfile works
 
