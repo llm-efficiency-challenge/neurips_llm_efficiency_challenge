@@ -38,7 +38,7 @@ entries = [
     {'scenario':'formal_fallacies_syllogisms_negation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=formal_fallacies_syllogisms_negation,subtask=", 'priority': 1},
 
     # 8. hindu_knowledge: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/hindu_knowledge
-    {'scenario':'hindu_knowledge','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=hindu_knowledge,subtask=", 'priority': 1},
+    # {'scenario':'hindu_knowledge','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=hindu_knowledge,subtask=", 'priority': 1},
 
     # 9. known_unknowns: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/known_unknowns
     {'scenario':'known_unknowns','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=known_unknowns,subtask=", 'priority': 1},
@@ -58,7 +58,7 @@ entries = [
     {'scenario':'logical_deduction','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=logical_deduction,subtask=seven_objects", 'priority': 1},
 
     # 14. misconceptions_russian: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/misconceptions_russian
-    {'scenario':'misconceptions_russian','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=misconceptions_russian,subtask=", 'priority': 1},
+    # {'scenario':'misconceptions_russian','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=misconceptions_russian,subtask=", 'priority': 1},
 
     # 15. novel_concepts: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/novel_concepts
     {'scenario':'novel_concepts','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=novel_concepts,subtask=", 'priority': 1},
@@ -67,7 +67,7 @@ entries = [
     {'scenario':'operator','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=operators,subtask=", 'priority': 1},
 
     # 17. parsinlu_reading_comprehension: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/parsinlu_reading_comprehension
-    {'scenario':'parsinlu_reading_comprehension','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=parsinlu_reading_comprehension,subtask=", 'priority': 1},
+    # {'scenario':'parsinlu_reading_comprehension','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=parsinlu_reading_comprehension,subtask=", 'priority': 1},
 
     # 18. play_dialog_same_or_different: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/play_dialog_same_or_different
     {'scenario':'play_dialog_same_or_different','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=play_dialog_same_or_different,subtask=", 'priority': 1},
@@ -201,27 +201,42 @@ def generate_equal_sum_list(V, N):
     
     return result
 
+import pandas as pd
+import argparse
 
 if __name__ == "__main__":
 
-    import pandas as pd
-    df = pd.DataFrame(entries)
-    scenarios = df.value_counts('scenario').to_dict()
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='''
+        This method automatically generates a configuration file for the neurips_llm_efficiency_challenge
+        
+        Calling it with: `python build_run_specs_full.py --example_budget=600` will produce a conf file 
+        with a total of 600 examples distributed evenly across scenarios as also defined here.
+        ''',
+    )
+    parser.add_argument("--example_budget", required=True, type=int, help='# example to use')
+    args = parser.parse_args()
+    
+    # get a list of scenarios and n_examples
+    df =  pd.DataFrame(entries)
+    scenario_count_dict = df.value_counts('scenario').to_dict()
+    n_scenarios = len(df.scenario.unique())
+    max_eval_instances_per_scenario = generate_equal_sum_list(args.example_budget, n_scenarios)
 
-    total_n_examples = 500
-    max_eval_instances_per_scenario = total_n_examples//len(df.scenario.unique())
-
-    for scenario, n_sucscenarios in scenarios.items():
-        scenarios[scenario] = generate_equal_sum_list(max_eval_instances_per_scenario,n_sucscenarios)
+    # get a dict of the amount of examples per 
+    scenario_n_examples_dict = {}
+    for scenario, n_subscenarios in scenario_count_dict.items():
+        cur_max_eval_instances_per_scenario = max_eval_instances_per_scenario.pop()
+        scenario_n_examples_dict[scenario] = generate_equal_sum_list(cur_max_eval_instances_per_scenario,n_subscenarios)
 
     for i in range(len(entries)):
         cur_scenario = entries[i]['scenario']
         # print(f"added {v} to {entries[i]['max_eval_instances']}")
-        v = scenarios[cur_scenario].pop()
+        v = scenario_n_examples_dict[cur_scenario].pop()
         entries[i]['max_eval_instances'] = v
 
-
-    with open(f'./run_specs_full_coarse_{total_n_examples}_examples.conf','w') as f:
+    with open(f'./run_specs_full_coarse_{args.example_budget}_budget.conf','w') as f:
         f.write('entries: [\n')
         last_scenario = ''
         for entry in entries:
@@ -235,3 +250,5 @@ if __name__ == "__main__":
             f.write(f',max_eval_instances={entry["max_eval_instances"]}""",priority: 1'.replace('"""','"'))
             f.write('}\n')
         f.write(']')
+
+    print(f'Saved ./run_specs_full_coarse_{args.example_budget}_budget.conf')
