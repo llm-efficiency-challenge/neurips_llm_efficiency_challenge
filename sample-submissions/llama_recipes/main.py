@@ -6,8 +6,8 @@ import time
 
 import torch
 from huggingface_hub import login
-from transformers import LlamaTokenizer
-from llama_recipes.inference.model_utils import load_model, load_peft_model
+from transformers import LlamaTokenizer, LlamaForCausalLM
+from llama_recipes.inference.model_utils import load_peft_model
 
 torch.set_float32_matmul_precision("high")
 
@@ -27,7 +27,12 @@ logging.basicConfig(level=logging.INFO)
 
 login(token=os.environ["HUGGINGFACE_TOKEN"])
 
-model = load_model('meta-llama/Llama-2-7b-hf', True)
+model = LlamaForCausalLM.from_pretrained(
+    'meta-llama/Llama-2-7b-hf',
+    return_dict=True,
+    torch_dtype=torch.float16,
+    device_map="cuda"
+    )
 model = load_peft_model(model, os.environ["HUGGINGFACE_REPO"])
 
 model.eval()
