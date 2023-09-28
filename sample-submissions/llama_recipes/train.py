@@ -14,7 +14,7 @@ def main():
         "batch_size_training": 2,
         "dataset": "custom_dataset",
         "custom_dataset.file": "./custom_dataset.py",
-        "output_dir": "./output_dir ",
+        "output_dir": "./output_dir",
     }
     
     finetuning(**kwargs)
