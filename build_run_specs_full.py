@@ -13,24 +13,6 @@ entries = [
     {'scenario':'conceptual_combinations','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conceptual_combinations,subtask=homonyms", 'priority': 1},
     {'scenario':'conceptual_combinations','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conceptual_combinations,subtask=invented_words", 'priority': 1},
 
-    # 5. conlang_translation: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/conlang_translation
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=adna_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=adna_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=atikampe_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=atikampe_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=gornam_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=gornam_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=holuan_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=holuan_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=mkafala_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=mkafala_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=postpositive_english_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=postpositive_english_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=unapuri_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=unapuri_to", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=vaomi_from", 'priority': 1},
-    {'scenario':'conlang_translation','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=conlang_translation,subtask=vaomi_to", 'priority': 1},
-
     # 6. emoji_movie: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/emoji_movie
     {'scenario':'emoji_movie','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=emoji_movie,subtask=", 'priority': 1},
 
@@ -42,9 +24,6 @@ entries = [
 
     # 9. known_unknowns: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/known_unknowns
     {'scenario':'known_unknowns','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=known_unknowns,subtask=", 'priority': 1},
-
-    # 10. language_identification: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/language_identification
-    {'scenario':'language_identification','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=language_identification,subtask=", 'priority': 1},
 
     # 11. linguistics_puzzles: https://github.com/google/big-bench/tree/main/bigbench/benchmark_tasks/linguistics_puzzles
     {'scenario':'linguistics_puzzles','description': "big_bench:model=neurips/local,max_train_instances=big_bench_few_shot_setting,task=linguistics_puzzles,subtask=", 'priority': 1},
