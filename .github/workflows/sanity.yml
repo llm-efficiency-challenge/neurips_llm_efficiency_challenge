@@ -19,7 +19,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        cd neurips_llm_efficiency_challenge/sample-submissions/lit-gpt
+        cd neurips sample-submissions/lit-gpt
         docker build -t sample_submission .
 
     - name: Run Docker Container
@@ -39,5 +39,6 @@ jobs:
     # Use the correct path for the conf file.
     - name: Run HELM Tests
       run: |
-        helm-run --conf-paths neurips_llm_efficiency_challenge/run_specs_full_coarse_600_budget.conf --suite v1 --max-eval-instances 10
+        cd -
+        helm-run --conf-paths run_specs_full_coarse_600_budget.conf --suite v1 --max-eval-instances 10
         helm-summarize --suite v1
