@@ -19,7 +19,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        cd neurips sample-submissions/lit-gpt
+        cd sample-submissions/lit-gpt
         docker build -t sample_submission .
 
     - name: Run Docker Container
