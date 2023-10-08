@@ -84,7 +84,7 @@ The end to end flow is described [here](leaderboard.md)
 
 When you registered for the competition you would have needed to create a github repo. When the submission deadline is reached make sure your Github repo has a `Dockerfile`, in case the location is ambiguous please sure to let us know in your `README.md`. The organizers will take your `Dockerfile` and run it as is and compute a baseline eval score. The purpose of this step is to primarily filter out broken submissions or submissions that can't outperform the unfinetuned sample submissions.
 
-The deadline is on Oct 15 2023 with important dates listed [here](https://llm-efficiency-challenge.github.io/dates)
+The deadline is on Oct 25 2023 with important dates listed [here](https://llm-efficiency-challenge.github.io/dates)
 
 ## Evaluating the Final Submission
 
