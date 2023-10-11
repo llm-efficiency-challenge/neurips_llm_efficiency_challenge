@@ -1,8 +1,8 @@
-# Llama-recipes example
+# Llama-recipes Example
 This example demonstrates how to fine-tune and serve a Llama 2 model with llama-recipes for submission in the LLM efficiency challenge using the [lit-gpt](../lit-gpt/) example as a template.
 Llama-recipes provides an easy way to fine-tune a Llama 2 model with custom datasets using efficient techniques like LoRA or Llama-adapters.
 
-# Getting started
+# Getting Started
 In order to use llama-recipes we need to install the following pip package:
 
 ```
@@ -21,7 +21,7 @@ ENV HUGGINGFACE_TOKEN="YOUR_TOKEN"
 ENV HUGGINGFACE_REPO="YOUR_USERNAME/YOUR_REPO"
 ```
 
-# Fine-tune the model
+# Fine-tune The Model
 With llama-recipes its possible to fine-tune Llama on custom data with a single command. To fine-tune on a custom dataset we need to implement a function (get_custom_dataset) that provides the custom dataset following this example [custom_dataset.py](https://github.com/facebookresearch/llama-recipes/blob/main/examples/custom_dataset.py).
 We can then train on this dataset using this command line:
 
@@ -31,10 +31,23 @@ python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantizatio
 
 **Note** The custom dataset in this example is dialog based. This is only due to the nature of the example but not a necessity of the custom dataset functionality. To see other examples of get_custom_dataset functions (btw the name of the function get_custom_dataset can be changed in the command line by using this syntax: /workspace/custom_dataset.py:get_foo_dataset) have a look at the [built-in dataset in llama-recipes](https://github.com/facebookresearch/llama-recipes/blob/main/src/llama_recipes/datasets/__init__.py).
 
-# Create submission
-The creation of a submission will be split in two Dockerfiles. The training Docker will perform a fine tuning with the LoRA method and load the base Llama weight before training. The resulting LoRA weights are then uploaded to huggingface_hub. The inference Docker will download base and LoRA weights from huggingface_hub (make sure to set token and repo in the Dockerfiles).
+# Create Submission
+*Note* For a submission to the competition only the inference part (Dockerfile.inference) will be necessary. A training docker (Dockerfile.train) will only be necessary if you need to replicate the submission in case you're within the top 3 contestants.
 
-To build and run the taining Docker we need to execute:
+## Prepare Leaderboard Submission
+The inference Docker will download base and LoRA weights from huggingface_hub. For the submission it is assumed that the trained weights are uploaded to a repo on huggingface_hub and the env variables HUGGINGFACE_TOKEN and HUGGINGFACE_REPO have been updated accordingly in the [Dockerfile.inference](https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/c4f3868a583c16c049959e6c69418a58977fab7c/sample-submissions/llama_recipes/Dockerfile.inference#L12).
+
+To create the zip file for submission to the eval bot use the following commands:
+```bash
+cd neurips_llm_efficiency_challenge/sample-submissions
+rm llama_recipes/Dockerfile.train
+mv llama_recipes/Dockerfile.inference llama_recipes/Dockerfile
+zip -r llama_recipes.zip llama_recipes
+```
+*Note* 1. Make sure to only zip the folder llama_recipes and do not include any other sample submission in the zipfile. 2. We need to rename the llama_recipes/Dockerfile.inference file to llama_recipes/Dockerfile as the eval system will look for the name Dockerfile exclusively. 3. We delete llama_recipes/Dockerfile.train as a precaution to avoid errors if submission logic changes.
+
+## Run Training And Inference Docker Locally
+To locally build and and run the taining Docker we need to execute:
 
 ```bash
 docker build -f ./Dockerfile.train -t llama_recipes_train .
@@ -42,7 +55,7 @@ docker build -f ./Dockerfile.train -t llama_recipes_train .
 docker run --gpus "device=0" --rm -ti llama_recipes_train
 ```
 
-The inference Docker is created and started with:
+The inference Docker can be created and started locally with:
 
 ```bash
 docker build -f ./Dockerfile.inference -t llama_recipes_inference .
