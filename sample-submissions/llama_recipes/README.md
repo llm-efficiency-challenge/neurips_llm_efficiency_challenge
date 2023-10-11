@@ -32,19 +32,18 @@ python3 -m llama_recipes.finetuning  --use_peft --peft_method lora --quantizatio
 **Note** The custom dataset in this example is dialog based. This is only due to the nature of the example but not a necessity of the custom dataset functionality. To see other examples of get_custom_dataset functions (btw the name of the function get_custom_dataset can be changed in the command line by using this syntax: /workspace/custom_dataset.py:get_foo_dataset) have a look at the [built-in dataset in llama-recipes](https://github.com/facebookresearch/llama-recipes/blob/main/src/llama_recipes/datasets/__init__.py).
 
 # Create Submission
-*Note* For a submission to the competition only the inference part (Dockerfile.inference) will be necessary. A training docker (Dockerfile.train) will only be necessary if you need to replicate the submission in case you're within the top 3 contestants.
+*Note* For a submission to the competition only the inference part (Dockerfile) will be necessary. A training docker (Dockerfile.train) will only be necessary if you need to replicate the submission in case you're within the top 3 contestants.
 
 ## Prepare Leaderboard Submission
-The inference Docker will download base and LoRA weights from huggingface_hub. For the submission it is assumed that the trained weights are uploaded to a repo on huggingface_hub and the env variables HUGGINGFACE_TOKEN and HUGGINGFACE_REPO have been updated accordingly in the [Dockerfile.inference](https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/c4f3868a583c16c049959e6c69418a58977fab7c/sample-submissions/llama_recipes/Dockerfile.inference#L12).
+The inference Docker will download base and LoRA weights from huggingface_hub. For the submission it is assumed that the trained weights are uploaded to a repo on huggingface_hub and the env variables HUGGINGFACE_TOKEN and HUGGINGFACE_REPO have been updated accordingly in the [Dockerfile](./Dockerfile).
 
 To create the zip file for submission to the eval bot use the following commands:
 ```bash
 cd neurips_llm_efficiency_challenge/sample-submissions
 rm llama_recipes/Dockerfile.train
-mv llama_recipes/Dockerfile.inference llama_recipes/Dockerfile
 zip -r llama_recipes.zip llama_recipes
 ```
-*Note* 1. Make sure to only zip the folder llama_recipes and do not include any other sample submission in the zipfile. 2. We need to rename the llama_recipes/Dockerfile.inference file to llama_recipes/Dockerfile as the eval system will look for the name Dockerfile exclusively. 3. We delete llama_recipes/Dockerfile.train as a precaution to avoid errors if submission logic changes.
+*Note* 1. Make sure to only zip the folder llama_recipes and do not include any other sample submission in the zipfile. 2. We delete llama_recipes/Dockerfile.train as a precaution to avoid errors if submission logic changes.
 
 ## Run Training And Inference Docker Locally
 To locally build and and run the taining Docker we need to execute:
@@ -58,7 +57,7 @@ docker run --gpus "device=0" --rm -ti llama_recipes_train
 The inference Docker can be created and started locally with:
 
 ```bash
-docker build -f ./Dockerfile.inference -t llama_recipes_inference .
+docker build -f ./Dockerfile -t llama_recipes_inference .
 
 docker run --gpus "device=0" -p 8080:80 --rm -ti llama_recipes_inference
 ```
