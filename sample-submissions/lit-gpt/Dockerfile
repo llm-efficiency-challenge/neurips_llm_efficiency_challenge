@@ -1,7 +1,5 @@
-# Use an official Python runtime as a parent image
-# other options in https://github.com/orgs/pytorch/packages/container/pytorch-nightly/versions?filters%5Bversion_type%5D=tagged
-# Lit-GPT requires current nightly (future 2.1) for the latest attention changes
-FROM ghcr.io/pytorch/pytorch-nightly:c69b6e5-cu11.8.0
+# Use latest official release with CUDA support https://hub.docker.com/r/pytorch/pytorch/tags
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-devel
 
 # Set the working directory in the container to /submission
 WORKDIR /submission
