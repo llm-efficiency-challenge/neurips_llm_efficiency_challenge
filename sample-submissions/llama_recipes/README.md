@@ -67,5 +67,5 @@ To test the inference docker we can run this query:
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"text": "What is the capital of france? "}' http://localhost:8080/tokenize
 OR
-curl -X POST -H "Content-Type: application/json" -d '{"text": "What is the capital of france? "}' http://localhost:8080/process
+curl -X POST -H "Content-Type: application/json" -d '{"prompt": "What is the capital of france? "}' http://localhost:8080/process
 ```
