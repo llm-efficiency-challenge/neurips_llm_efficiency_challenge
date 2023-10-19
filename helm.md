@@ -11,7 +11,7 @@ Follow instructions in [toy-submission](/sample-submissions/lit-gpt/) to setup a
 
 ## Configure HELM
 
-You can configure which datasets to run HELM on by editing a `run_specs.conf`, to run your model on a large set of datasets, take a look at https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/master/run_specs_full_coarse_600_examples.conf for some inspiration.
+You can configure which datasets to run HELM on by editing a `run_specs.conf`, to run your model on a large set of datasets. For the preliminary evaluation the organizers will use  https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge/blob/master/run_specs_full_coarse_600_budget.conf
 
 ```bash
 helm-run --conf-paths run_specs_full_coarse_600_budget.conf --suite v1 --max-eval-instances 10
