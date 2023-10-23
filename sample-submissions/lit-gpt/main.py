@@ -92,6 +92,9 @@ async def process_request(input_data: ProcessRequest) -> ProcessResponse:
 
     if input_data.echo_prompt is False:
         output = tokenizer.decode(tokens[prompt_length:])
+        tokens = tokens[prompt_length:]
+        logprobs = logprobs[prompt_length:]
+        top_logprobs = top_logprobs[prompt_length:]
     else:
         output = tokenizer.decode(tokens)
     tokens_generated = tokens.size(0) - prompt_length

@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 import torch
 
@@ -35,17 +35,36 @@ def toysubmission_generate(
         # rolling the kv cache based on the `input_pos` value would be necessary. However, doing so would introduce a
         # data dependency on the `input_pos` tensor and impact model compilation. Since this setting is uncommon, we do
         # not support it to avoid negatively impacting the overall speed
-        raise NotImplementedError(f"max_seq_length {model.max_seq_length} needs to be >= {max_returned_tokens - 1}")
+        raise NotImplementedError(
+            f"max_seq_length {model.max_seq_length} needs to be >= {max_returned_tokens - 1}"
+        )
 
     device, dtype = idx.device, idx.dtype
     # create an empty tensor of the expected final shape and fill in the current tokens
     empty = torch.empty(max_returned_tokens, dtype=dtype, device=device)
+    # prefill empty with the prompt token indexes
     empty[:T] = idx
     idx = empty
     input_pos = torch.arange(0, T, device=device)
 
     top_logprob = []
     logprob = []
+
+    # Generate log_prob and top_log_prob for the prompt
+    logits = model(idx[:T].view(1, -1), input_pos)
+    probs = torch.nn.functional.softmax(logits, dim=-1)[0]
+    prompt_log_probs = torch.log(probs)
+    prompt_max_probs, prompt_argmax_probs = torch.max(probs, dim=-1)
+    # Grab the logprob for all the tokens in the prompt
+    logprob.extend(
+        prompt_log_probs.gather(-1, idx[:T, None].to(torch.int64)).squeeze(-1).tolist()
+    )
+    top_logprob.extend(
+        [
+            (argmax.item(), max_prob.item())
+            for argmax, max_prob in zip(prompt_argmax_probs, prompt_max_probs)
+        ]
+    )
 
     # generate up to a fixed number of tokens
     for _ in range(max_returned_tokens - T):
